@@ -60,7 +60,9 @@ function SendMessage({ user }) {
           value={inputVal}
         />
       </label>
-      <AiOutlineSend style={{ cursor: "pointer", fontSize: "25px" }} />
+      <button>
+        <AiOutlineSend style={{ cursor: "pointer", fontSize: "25px" }} />
+      </button>
     </SendMessageStyle>
   );
 }
@@ -85,6 +87,11 @@ const SendMessageStyle = styled.form`
     &:focus {
       outline: none;
     }
+  }
+  button {
+    background: none;
+    border: none;
+    outline: none;
   }
   @media only screen and (max-width: 650px) {
     padding: 10px 15px;
