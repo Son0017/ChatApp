@@ -12,6 +12,20 @@ let initializeState = {
   message: null,
 };
 
+function filter(array) {
+  let newArray;
+  if (array.length > 0 && array) {
+    if (array.length > 1) {
+      newArray = array.sort(
+        (a, b) => b.newMes.time.seconds - a.newMes.time.seconds
+      );
+    } else {
+      newArray = [...array];
+    }
+  }
+  return array;
+}
+
 let reducer = (state, action) => {
   switch (action.type) {
     case "USERS":
@@ -21,7 +35,7 @@ let reducer = (state, action) => {
     case "CURRENT_USER":
       return { ...state, currentUser: action.payload, close: false };
     case "ROOMS":
-      return { ...state, rooms: action.payload };
+      return { ...state, rooms: filter(action.payload) };
     default:
       return { ...state };
   }

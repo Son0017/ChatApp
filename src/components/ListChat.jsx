@@ -1,12 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-// import { AiOutlineCheck } from "react-icons/all";
 import { userContext } from "../context/userContext";
-// import { dataContext } from "../context/dataContext";
 function ListChat({ data, setOpen }) {
-  const { dispatch } = userContext();
-  let newMes;
-  // console.log(data);
+  const { dispatch, rooms } = userContext();
+
   return (
     <ListChatStyle>
       {data &&
@@ -15,7 +12,27 @@ function ListChat({ data, setOpen }) {
             <li
               key={item.email}
               onClick={() => {
-                dispatch({ type: "CURRENT_USER", payload: { ...item } });
+                if (rooms) {
+                  if (rooms.length !== 0) {
+                    rooms.map((item2) => {
+                      if (item.email === item2.email) {
+                        dispatch({
+                          type: "CURRENT_USER",
+                          payload: { ...item2 },
+                        });
+                      } else {
+                        dispatch({
+                          type: "CURRENT_USER",
+                          payload: { ...item },
+                        });
+                      }
+                    });
+                  } else {
+                    dispatch({ type: "CURRENT_USER", payload: { ...item } });
+                  }
+                } else {
+                  dispatch({ type: "CURRENT_USER", payload: { ...item } });
+                }
                 setOpen(true);
               }}
             >
@@ -25,16 +42,16 @@ function ListChat({ data, setOpen }) {
               <div className="userName">
                 <div>
                   <h3>{item.name}</h3>
-                  {!newMes && <p>{item.email}</p>}
-                  {newMes && (
-                    <p style={{ color: "blue" }}>
-                      {newMes.length > 0
-                        ? newMes[newMes.length - 1].message
-                        : data[data.length - 1].message}
-                    </p>
+                  {!item.newMes && <p>{item.email}</p>}
+                  {item.newMes && (
+                    <p style={{ color: "blue" }}>{item.newMes.message}</p>
                   )}
                 </div>
-                <span></span>
+                {item.newMes && item.newMes.number > 0 && (
+                  <span style={{ color: "blue", fontSize: "15px" }}>
+                    {item.newMes.number}
+                  </span>
+                )}
               </div>
             </li>
           );

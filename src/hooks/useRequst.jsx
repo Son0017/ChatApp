@@ -25,13 +25,18 @@ function useRequst() {
     });
   };
 
-  const addRoom = async (user, authUser) => {
+  const addRoom = async (user, authUser, data) => {
     let x = `${authUser.nickname}${user.nickname}`;
     await setDoc(doc(db, `${user.email}`, `${authUser.email}`), {
       x,
       ...authUser,
+      newMes: data,
     });
-    await setDoc(doc(db, `${authUser.email}`, `${user.email}`), { ...user, x });
+    await setDoc(doc(db, `${authUser.email}`, `${user.email}`), {
+      ...user,
+      x,
+      newMes: data,
+    });
   };
   const setMessageToRoom = async (id, data) => {
     // console.log(id, "asfd", data);

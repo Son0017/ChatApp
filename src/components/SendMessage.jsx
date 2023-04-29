@@ -4,15 +4,16 @@ import styled from "styled-components";
 import { AiOutlineSend, BsEmojiSmile } from "react-icons/all";
 import useRequst from "../hooks/useRequst";
 import { userContext } from "../context/userContext";
+import useGetData from "../hooks/useGetData";
 
 function SendMessage({ user }) {
   const [inputVal, setInputVal] = useState("");
   const { addRoom, setMessageToRoom } = useRequst();
+  const { addNewMes } = useGetData();
   const { currentUser, dispatch } = userContext();
   const handleSubmit = (e) => {
     e.preventDefault();
     setInputVal("");
-
     if (inputVal.trim().length > 0) {
       if (currentUser.x) {
         setMessageToRoom(currentUser.x, {
@@ -28,9 +29,38 @@ function SendMessage({ user }) {
           from: user.nickname,
           newMes: true,
         });
+        console.log(currentUser);
+        addNewMes(user.email, currentUser.email, {
+          message: inputVal,
+          time: {
+            seconds: new Date().getTime(),
+            getMonth: new Date().getMonth(),
+            getHour: new Date().getHours(),
+            getMinut: new Date().getMinutes(),
+            getDat: new Date().getDate(),
+            getYear: new Date().getFullYear(),
+          },
+          from: user.nickname,
+          newMes: true,
+          number: 1,
+        });
       } else {
         let x = `${user.nickname}${currentUser.nickname}`;
-        addRoom(currentUser, user);
+        addRoom(currentUser, user, {
+          message: inputVal,
+          time: {
+            seconds: new Date().getTime(),
+            getMonth: new Date().getMonth(),
+            getHour: new Date().getHours(),
+            getMinut: new Date().getMinutes(),
+            getDat: new Date().getDate(),
+            getYear: new Date().getFullYear(),
+          },
+          from: user.nickname,
+          newMes: true,
+          number: 1,
+        });
+
         setMessageToRoom(x, {
           message: inputVal,
           time: {
@@ -47,7 +77,6 @@ function SendMessage({ user }) {
       }
     }
   };
-
   return (
     <SendMessageStyle onSubmit={handleSubmit}>
       <BsEmojiSmile style={{ cursor: "pointer", fontSize: "25px" }} />

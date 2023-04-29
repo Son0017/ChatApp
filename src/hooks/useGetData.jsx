@@ -1,10 +1,17 @@
+import { useEffect } from "react";
 import { dataContext } from "../context/dataContext";
 import { userContext } from "../context/userContext";
-import { db, collection, onSnapshot } from "../firebase/useFirebaseConfig";
+import {
+  db,
+  collection,
+  onSnapshot,
+  doc,
+  updateDoc,
+} from "../firebase/useFirebaseConfig";
 
 function useGetData() {
   const { dispatch } = userContext();
-  const { dispatch: dataDispatch, newMessage } = dataContext();
+  const { dispatch: dataDispatch } = dataContext();
   const getRooms = (id) => {
     onSnapshot(collection(db, `${id}`), (querySnapshot) => {
       const rooms = [];
@@ -14,6 +21,7 @@ function useGetData() {
       dispatch({ type: "ROOMS", payload: rooms });
     });
   };
+
   const getMessage = (id) => {
     onSnapshot(collection(db, `${id}`), (querySnapshot) => {
       const rooms = [];
@@ -24,7 +32,13 @@ function useGetData() {
     });
   };
 
-  return { getRooms, getMessage };
+  const addNewMes = async (user, currentUser, data) => {
+    const washingtonRef = doc(db, `${currentUser}`, `${user}`);
+    await updateDoc(washingtonRef, {
+      newMes: { ...data },
+    });
+  };
+  return { getRooms, getMessage, addNewMes };
 }
 
 export default useGetData;
