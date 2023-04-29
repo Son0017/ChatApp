@@ -12,7 +12,7 @@ function MessageList() {
   const { messageData: message } = dataContext();
   useEffect(() => {
     getMessage(currentUser.x);
-  }, [currentUser, user.email]);
+  }, [currentUser, message]);
 
   return (
     <MessageListStyle>
