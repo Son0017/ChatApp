@@ -29,7 +29,7 @@ function SendMessage({ user }) {
           from: user.nickname,
           newMes: true,
         });
-        console.log(currentUser);
+        console.log(currentUser.newMes.number);
         addNewMes(user.email, currentUser.email, {
           message: inputVal,
           time: {

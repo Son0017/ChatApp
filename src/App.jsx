@@ -5,9 +5,10 @@ import { useAuth0 } from "@auth0/auth0-react";
 import useRequst from "./hooks/useRequst";
 import { useEffect, useState } from "react";
 import useGetData from "./hooks/useGetData";
+import Loading from "./components/Loading";
 
 function App() {
-  const { isAuthenticated, user, loginWithRedirect } = useAuth0();
+  const { isAuthenticated, user, loginWithRedirect, isLoading } = useAuth0();
   const { addUser } = useRequst();
   const { getRooms } = useGetData();
   useEffect(() => {
@@ -19,12 +20,14 @@ function App() {
   const [open, setOpen] = useState(false);
   return (
     <>
-      {isAuthenticated ? (
+      {isLoading && <Loading />}
+      {isAuthenticated && (
         <APP>
           <UserSide open={open} setOpen={setOpen} />
           <Chat open={open} setOpen={setOpen} />
         </APP>
-      ) : (
+      )}
+      {!isAuthenticated && (
         <Welcome>
           <div>
             <h4>Welcome To Chat</h4>
